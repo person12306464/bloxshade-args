@@ -137,8 +137,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     size_t end = robloxPath.rfind('"');
     std::string path = robloxPath.substr(start, end - start);
 
-    // check the path
+    // Remove the new arg garbage thing that apparently didn't exist before
+    std::string argGarbageThing = "\" -player \"%1";
+
+    if (path.find(argGarbageThing) != std::string::npos) {
+        int startPosition = path.find(argGarbageThing);
+        path.erase(startPosition, argGarbageThing.length());
+
+        std::cout << "Removed arg garbage thing" << std::endl;
+    }
+
+
     std::cout << "Path to check: " << path << std::endl; // show the path
+
+    // check the path
     if (path.find("C:\\Program Files") == 0 || path.find("C:\\Program Files (x86)") == 0) {
         std::cout << "Program files is true" << std::endl;
         MessageBox(NULL, L"It seems like Roblox is installed system-wide in the Program Files directory. Please install Roblox in a location other than the Program Files directory.", L"Information", MB_OK | MB_ICONWARNING);
@@ -178,6 +190,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     if (bloxstrap) {
         std::cout << "Bloxstrap is true" << std::endl;
 
+        /*
         // read json
         std::ifstream file(path);
         if (!file.is_open()) {
@@ -210,8 +223,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         else {
             versionGuid = data["VersionGuid"];
         }
-        std::string versionsDir = "Versions\\";
-        path.replace(BloxstrapPos, strlen("State.json"), versionsDir + versionGuid);
+        */
+
+        std::string versionsDir = "Roblox\\Player";
+        path.replace(BloxstrapPos, strlen("State.json"), versionsDir);
 
         bloxstrapPath = path + "\\eurotrucks2.exe";
         //std::cout << bloxstrapPath << std::endl;
